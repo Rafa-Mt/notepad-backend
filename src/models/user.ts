@@ -1,6 +1,5 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "../types";
-import bcrypt from 'bcrypt';
 
 export const userSchema = new Schema<IUser>({
     username: { type: String, required: true, unique: true },

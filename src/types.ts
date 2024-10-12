@@ -1,12 +1,11 @@
 import { ObjectId, Document} from "mongoose";
 import { z } from 'zod'
 
-export type Email = `${string}@${string}.${string}`;
 export type Priority = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface IUser extends Document {
     username: string;
-    email: Email;
+    email: string;
     password: string;
     deleted: boolean;
 }
@@ -26,8 +25,14 @@ export interface ICategory extends Document {
     owner: ObjectId
 }
 
+export interface IPasswordResetToken extends Document {
+    username: string,
+    token : string,
+    createdAt: Date
+}
+
 export interface Mail {
-    to: Email,
+    to: string,
     subject: string,
     text?: string,
     html?: string,

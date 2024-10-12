@@ -1,4 +1,4 @@
-// src/index.js
+
 import express, { Express, json, Request, Response } from "express";
 import dotenv from "dotenv";
 import { connect } from "mongoose";
@@ -16,7 +16,7 @@ connect(process.env.DB_CONN_STRING as string);
 
 app.use(json())
 
-app.use('/', auth);
+app.use('/auth', auth);
 app.use('/user', user);
 
 app.get("/", (req: Request, res: Response) => {  
