@@ -1,19 +1,23 @@
 import { loginSchema, passwordResetSchema, registerSchema, resetRequestSchema } from "../schemas/auth";
-import express from "express";
-import { changePassword, checkPassword, getErrorMessage, register, sendToken } from "../services/auth";
+import { Router, NextFunction, Request, Response } from "express";
+import { changePassword, login, getErrorMessage, register, sendToken } from "../services/auth";
+import { Secret, verify } from "jsonwebtoken";
+import { config as dotenv } from 'dotenv'
+import { CustomRequest } from "../types";
 
-const router = express.Router();
+const router = Router();
 export default router;
+
+dotenv();
 
 router.post('/login', async (req, res) => {
     const body = loginSchema.safeParse(req.body);
-
     if (!body.success) {
         res.status(500).send(body.error.format());
         return
     }
     try {
-        const foundUser = await checkPassword(body.data);
+        const foundUser = await login(body.data);
         res.status(200).send(foundUser);
     } 
     catch (error) {
@@ -76,3 +80,18 @@ router.post('/reset-password', async (req, res) => {
         return
     }
 })
+
+const auth = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer', '');
+
+        if (!token) throw new Error('Token not found');
+        const decodedToken = verify(token, process.env.JWT_SECRET_KEY as Secret);
+        (req as CustomRequest).token = decodedToken;
+
+        next();
+    }
+    catch (error) {
+        res.status(400).send('User not logged in')
+    }
+}

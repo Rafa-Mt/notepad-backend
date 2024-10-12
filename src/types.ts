@@ -1,5 +1,7 @@
 import { ObjectId, Document} from "mongoose";
 import { z } from 'zod'
+import { Request } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
 export type Priority = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -36,4 +38,8 @@ export interface Mail {
     subject: string,
     text?: string,
     html?: string,
+}
+
+export interface CustomRequest extends Request {
+    token: string | JwtPayload;
 }

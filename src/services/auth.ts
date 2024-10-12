@@ -3,6 +3,10 @@ import { User, userSchema } from "../models/user";
 import { sendMessage } from "./mailer";
 import { randomBytes } from "crypto";
 import { PasswordToken } from "../models/passwordResetToken";
+import { sign, Secret } from 'jsonwebtoken'
+import {config as dotenv} from 'dotenv'
+
+dotenv();
 
 const saltRounds = 8
 
@@ -138,4 +142,17 @@ export const changePassword = async (data: {username: string, newPassword: strin
             reject(error);
         }
     })
+}
+
+export const login = async (user: {username: string, password: string}) => {
+    try {   
+        const userCheck = await checkPassword(user);
+        const token = sign({_id: userCheck._id?.toString(), username: userCheck.username, email: userCheck.email}, process.env.JWT_SECRET_KEY as Secret, {expiresIn: '5 days'});
+
+        const {_id, username, email} = userCheck;
+        return { user: { _id, username, email }, token }
+    }
+    catch (error) {
+        throw error;
+    }
 }
