@@ -24,7 +24,6 @@ export const sendMessage = async (content: Mail) => {
         from: process.env.MAIL_DIR,
         to, subject, text, html,
     });
-    console.log("message sended")
 }
 
 // * Test Message

@@ -1,6 +1,6 @@
 import { loginSchema, passwordResetSchema, registerSchema, resetRequestSchema } from "../schemas/auth";
 import express from "express";
-import { checkPassword, getErrorMessage, register, sendToken } from "../services/auth";
+import { changePassword, checkPassword, getErrorMessage, register, sendToken } from "../services/auth";
 
 const router = express.Router();
 export default router;
@@ -62,6 +62,17 @@ router.post('/reset-password', async (req, res) => {
 
     if (!body.success) {
         res.status(500).send(body.error.format());
+        return
+    }
+
+    try {
+        const success = await changePassword(body.data);
+        if (!success) throw new Error('Failed to change password');
+
+        res.status(200).send({success: "Password changed successfully"})
+    }
+    catch (error) {
+        res.status(500).send(getErrorMessage(error));
         return
     }
 })

@@ -2,7 +2,7 @@ import { compareSync, hash } from "bcrypt";
 import { User, userSchema } from "../models/user";
 import { sendMessage } from "./mailer";
 import { randomBytes } from "crypto";
-import { PasswordToken, passwordTokenSchema } from "../models/passwordResetToken";
+import { PasswordToken } from "../models/passwordResetToken";
 
 const saltRounds = 8
 
@@ -19,7 +19,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
     try {
         const foundUser = await User.findOne({ username });
 
-        if (!foundUser) throw new Error('Invalid credentials'); 
+        if (!foundUser) throw new Error('Invalid user'); 
 
         const isMatch = compareSync(password, foundUser.password);
 
@@ -27,7 +27,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
             console.log(foundUser)
             return foundUser
         } 
-        else throw new Error('Invalid credentials');
+        else throw new Error('Invalid password');
         
     } 
     catch (error) {
@@ -70,7 +70,7 @@ const tokenMailFormat =  (token: string) => `
             </div> 
             <p style="color: #3C3C3B; line-height: 1.5;">Use this token to reset your password. It will expire if not used within 10 minutes</p>
             <p style="color: #3C3C3B; line-height: 1.5;">Best regards,<br>The TLAS Team</p>
-            <div style="margin-top: 30px; font-size: 0.9em; color: #3C3C3B;">
+            <div style="margin-top: 30px; font-size: 0.9em; color: #1C1C1B;">
                 <p>&copy; 2024 TLAS. All rights reserved.</p>
             </div>
         </div>
@@ -79,7 +79,6 @@ const tokenMailFormat =  (token: string) => `
 export const sendToken = async (email: string) => {
     try {
         const tokens = await PasswordToken.find();
-        console.log(tokens)
 
         const foundUser = await User.findOne({ email });
         
@@ -88,7 +87,7 @@ export const sendToken = async (email: string) => {
         const token = await createToken(foundUser.username);
 
         const tokenEntry = new PasswordToken({ username: foundUser.username, token});
-        tokenEntry.save();
+        await tokenEntry.save();
 
         sendMessage({
             to: foundUser.email,
@@ -116,4 +115,27 @@ export const register = async (user: { username: string, email: string, password
     catch (error) {
         throw error;
     }
+}
+
+export const changePassword = async (data: {username: string, newPassword: string, token: string}) => {
+    return new Promise( async (resolve, reject) => {
+        const { username, newPassword, token } = data;
+        try {
+            const userToChange = await User.findOne({ username });
+            if (!userToChange) throw new Error('User not found'); 
+            
+            const tokenChecker = await checkToken(token);
+            if (!tokenChecker) throw new Error('Invalid token');
+            
+            const hashedPassword = await hash(newPassword, saltRounds);
+            userToChange.password = hashedPassword;
+            await userToChange.save();
+            
+            await PasswordToken.deleteOne({token});
+            resolve(true);
+        }
+        catch (error) {
+            reject(error);
+        }
+    })
 }
