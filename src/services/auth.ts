@@ -3,8 +3,10 @@ import { User, userSchema } from "../models/user";
 import { sendMessage } from "./mailer";
 import { randomBytes } from "crypto";
 import { PasswordToken } from "../models/passwordResetToken";
-import { sign, Secret } from 'jsonwebtoken'
+import { sign, Secret, verify } from 'jsonwebtoken'
 import {config as dotenv} from 'dotenv'
+import { Request, Response, NextFunction } from "express"; 
+import { CustomRequest } from "../types";
 
 dotenv();
 
@@ -151,5 +153,20 @@ export const login = async (user: {username: string, password: string}) => {
     }
     catch (error) {
         throw error;
+    }
+}
+
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer', '');
+
+        if (!token) throw new Error('Token not found');
+        const decodedToken = verify(token, process.env.JWT_SECRET_KEY as Secret);
+        (req as CustomRequest).token = decodedToken;
+
+        next();
+    }
+    catch (error) {
+        res.status(400).send('User not logged in')
     }
 }
