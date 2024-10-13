@@ -1,15 +1,46 @@
 import { User } from "../models/user";
 import express from 'express'
+import { auth } from '../services/auth'
+import { resetRequestSchema } from "../schemas/auth";
+import { FormatError, getErrorMessage } from "../services/utils";
 
 const router = express.Router();
 export default router;
 
-router.get("/:username", async (req, res) => {
-    const { username } = req.params;
-    const requestedUser = await User.findOne({username});
-    res.json(requestedUser);
+router.delete("/:username", auth ,async (req, res) => {
+    try {
+        const {username} = req.params;
+        
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: {$ne: true}}]});
+        if (!foundUser) 
+            throw new Error('User not found');
+
+        foundUser.deleted = true;
+        await foundUser.save();
+        res.status(200).send({success: "User deleted successfully!"})
+    }
+    catch(error) {
+        res.status(500).send(getErrorMessage(error))
+    }
 })
 
-router.delete("/:username", async (req, res) => {
-    console.log(req.params, req.body)
+router.put('/:username/change-email', auth , async (req, res) => {
+    try {
+        const { username } = req.params;
+        const body = resetRequestSchema.safeParse(req.body);
+        
+        if (!body.success) 
+            throw new FormatError(JSON.stringify(body.error.flatten()));
+        
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: {$ne: true}}]});
+        if (!foundUser) 
+            throw new Error('User not found');
+
+        foundUser.email = body.data.email;
+        await foundUser.save();
+        res.status(200).send({success: "Changed email successfully!"})
+    }
+    catch(error) {
+        res.status(500).send(getErrorMessage(error))
+    }
 })
