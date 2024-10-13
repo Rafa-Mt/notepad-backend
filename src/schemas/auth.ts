@@ -12,7 +12,7 @@ export const loginSchema = z.object({
 })
 
 export const passwordResetSchema = z.object({
-    username: z.string().refine(s => !s.includes(' '), 'No Spaces!'),
+    email: z.string().email(),
     newPassword: z.string().min(8),
     token: z.string()
 });

@@ -11,7 +11,7 @@ router.delete("/:username", auth ,async (req, res) => {
     try {
         const {username} = req.params;
         
-        const foundUser = await User.findOne({ $and: [{ username }, {deleted: {$ne: true}}]});
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
 
@@ -32,7 +32,7 @@ router.put('/:username/change-email', auth , async (req, res) => {
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
         
-        const foundUser = await User.findOne({ $and: [{ username }, {deleted: {$ne: true}}]});
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
 

@@ -23,7 +23,7 @@ userSchema.pre('save', async function (next) {
 export const checkPassword = async (user: {username: string, password: string}) => {
     const { username, password } = user;
     try {
-        const foundUser = await User.findOne({ username });
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
 
         if (!foundUser) throw new Error('Invalid user'); 
 
@@ -120,14 +120,14 @@ export const register = async (user: { username: string, email: string, password
     }
 }
 
-export const changePassword = async (data: {username: string, newPassword: string, token: string}) => {
+export const changePassword = async (data: {email: string, newPassword: string, token: string}) => {
     return new Promise( async (resolve, reject) => {
-        const { username, newPassword, token } = data;
+        const { email, newPassword, token } = data;
         try {
-            const userToChange = await User.findOne({ username });
+            const userToChange = await User.findOne({ $and: [{ email }, {deleted: false}]});
             if (!userToChange) throw new Error('User not found'); 
             
-            const tokenChecker = await checkToken(token);
+            const tokenChecker = await checkToken(token.toLowerCase());
             if (!tokenChecker) throw new Error('Invalid token');
             
             const hashedPassword = await hash(newPassword, saltRounds);

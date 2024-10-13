@@ -57,7 +57,7 @@ router.post('/send-reset-token', async (req, res) => {
 
 })
 
-router.post('/reset-password', async (req, res) => {
+router.put('/reset-password', async (req, res) => {
     try {
         const body = passwordResetSchema.safeParse(req.body);
 
