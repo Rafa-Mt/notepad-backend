@@ -1,6 +1,7 @@
 import { loginSchema, passwordResetSchema, registerSchema, resetRequestSchema } from "../schemas/auth";
 import { Router, NextFunction, Request, Response } from "express";
-import { changePassword, login, getErrorMessage, register, sendToken } from "../services/auth";
+import { changePassword, login, register, sendToken } from "../services/auth";
+import { getErrorMessage } from "../services/utils";
 import { Secret, verify } from "jsonwebtoken";
 import { config as dotenv } from 'dotenv'
 import { CustomRequest } from "../types";

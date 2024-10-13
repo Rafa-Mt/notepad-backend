@@ -104,10 +104,7 @@ export const sendToken = async (email: string) => {
     }
 }
 
-export const getErrorMessage = (error: unknown) => {
-    if (error instanceof Error) return {error:error.message};
-    return {error:String(error)};
-}
+
 
 export const register = async (user: { username: string, email: string, password: string }) => {
     const { username, email, password } = user;
