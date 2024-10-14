@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { connect } from "mongoose";
 import auth from './routes/auth';
 import user from './routes/user'
+import notes from './routes/notes'
+import categories from './routes/categories'
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(json())
 
 app.use('/auth', auth);
 app.use('/user', user);
+app.use('/user', notes);
+app.use('/user', categories);
 
 app.get("/", (req: Request, res: Response) => {  
     console.log("Gotten request to '/'")

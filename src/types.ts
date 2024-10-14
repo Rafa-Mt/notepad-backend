@@ -3,8 +3,6 @@ import { z } from 'zod'
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
-export type Priority = 0 | 1 | 2 | 3 | 4 | 5;
-
 export interface IUser extends Document {
     username: string;
     email: string;
@@ -17,14 +15,15 @@ export interface INote extends Document {
     content: string,
     categories: ObjectId[],
     owner: ObjectId,
-    priority: Priority,
+    priority: number,
     favorite: boolean,
     deleted: boolean,
 }
 
 export interface ICategory extends Document {
     title: string,
-    owner: ObjectId
+    owner: ObjectId,
+    emoji: string
 }
 
 export interface IPasswordResetToken extends Document {
