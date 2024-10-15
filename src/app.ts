@@ -11,7 +11,6 @@ dotenv.config();
 
 export const app: Express = express();
 export const router = express.Router();
-export const host = process.env.HOST || 'localhost';
 export const port = process.env.PORT || 3000;
 
 connect(process.env.DB_CONN_STRING as string);
@@ -30,5 +29,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-    console.log(`[server]: Server is running at ${host}:${port}`);
+    console.log(`[server]: Server is running at port ${port}`);
 });
