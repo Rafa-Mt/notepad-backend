@@ -1,7 +1,7 @@
 {
   "name": "notepad-backend",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "app.ts",
   "scripts": {
     "dev": "nodemon",
     "start": "ts-node -r tsconfig-paths/register src/app.ts"
