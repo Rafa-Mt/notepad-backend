@@ -1,6 +1,6 @@
-import { loginSchema, passwordResetSchema, registerSchema, resetRequestSchema } from "../schemas/auth";
+import { loginSchema, passwordResetSchema, registerSchema, resetRequestSchema, tokenCheckSchema } from "../schemas/auth";
 import { Router } from "express";
-import { changePassword, login, register, sendToken } from "../services/auth";
+import { changePassword, checkToken, login, register, sendToken } from "../services/auth";
 import { FormatError, getErrorMessage } from "../services/utils";
 import { config as dotenv } from 'dotenv'
 
@@ -74,3 +74,21 @@ router.put('/reset-password', async (req, res) => {
     }
 })
 
+router.post('/check-reset-token', async (req, res) => {
+    try {
+        const body = tokenCheckSchema.safeParse(req.body);
+
+        if (!body.success) 
+            throw new FormatError(JSON.stringify(body.error.flatten()))
+
+        const success = await checkToken(body.data.token);
+
+        if (!success) throw new Error('Invalid Token');
+
+        res.status(200).send({success: "Valid Token"})
+    }
+    catch (error) {
+        res.status(500).send(getErrorMessage(error));
+        return
+    }
+});

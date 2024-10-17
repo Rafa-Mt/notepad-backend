@@ -41,8 +41,8 @@ export const checkPassword = async (user: {username: string, password: string}) 
     }
 }
 
-const checkToken = async (token: string, username?: string) => {
-    return PasswordToken.findOne({ $or: [{ token }, { username }] });
+export const checkToken = async (token: string, username?: string) => {
+    return await PasswordToken.findOne({ $or: [{ token }, { username }] });
 }
 
 const createToken = async (username: string, attempt: number = 0): Promise<string> => {

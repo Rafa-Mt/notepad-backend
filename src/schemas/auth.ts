@@ -19,4 +19,8 @@ export const passwordResetSchema = z.object({
 
 export const resetRequestSchema = z.object({
     email: z.string().email()
+});
+
+export const tokenCheckSchema = z.object({
+    token: z.string()
 })
