@@ -4,7 +4,6 @@ import { changePassword, login, register, sendToken } from "../services/auth";
 import { FormatError, getErrorMessage } from "../services/utils";
 import { config as dotenv } from 'dotenv'
 
-
 const router = Router();
 export default router;
 
@@ -16,7 +15,7 @@ router.post('/login', async (req, res) => {
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()))
         const foundUser = await login(body.data);
-        res.status(200).send(foundUser);
+        res.status(200).send({ success: "Logged in succesfully!", data: foundUser });
     } 
     catch (error) {
         res.status(500).send(getErrorMessage(error));

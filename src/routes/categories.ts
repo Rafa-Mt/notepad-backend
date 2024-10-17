@@ -18,7 +18,7 @@ router.get('/:username/categories', auth, async (req, res) => {
 
         const foundCategories = await Category.find({owner: foundUser._id});
 
-        res.status(200).send({categories: foundCategories})
+        res.status(200).send({ success:"Categories found", data: foundCategories })
     }
     catch(error) {
         res.status(500).send(getErrorMessage(error))
@@ -84,7 +84,7 @@ router.put('/:username/category/:title', auth, async (req, res) => {
         
         await catToSave.save();
 
-        res.status(200).send({success: "Category created successfully!"})
+        res.status(200).send({ success: "Category edited successfully!" })
     }
     catch(error) {
         res.status(500).send(getErrorMessage(error))
@@ -101,7 +101,7 @@ router.delete('/:username/category/:title', auth, async (req, res) => {
 
         await Category.deleteOne({ $and: [{ owner: foundUser._id }, {deleted: false}, { title }]});
 
-        res.status(200).send({success: "Category deleted successfully!"})
+        res.status(200).send({ success: "Category deleted successfully!" })
     }
     catch(error) {
         res.status(500).send(getErrorMessage(error))

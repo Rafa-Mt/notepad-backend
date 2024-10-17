@@ -32,11 +32,11 @@ router.get('/:username/notes/:title', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const foundNotes = await Note.findOne(
+        const foundNote = await Note.findOne(
             { owner: foundUser._id }, {deleted: false}, {title}
         );
 
-        res.status(200).send({notes: foundNotes});
+        res.status(200).send({ success:"Found note!", data: foundNote});
     }
     catch (error) {
         res.status(500).send(getErrorMessage(error));
@@ -54,7 +54,7 @@ router.get('/:username/notes/:category', auth, async (req, res) => {
             $and: [{ owner: foundUser._id }, {deleted: false}, { categories: category }]
         });
 
-        res.status(200).send({notes: foundNotes});
+        res.status(200).send({ success:"Found notes!", data: foundNotes });
     }
     catch (error) {
         res.status(500).send(getErrorMessage(error));
@@ -72,7 +72,7 @@ router.get('/:username/notes/favorites', auth, async (req, res) => {
             $and: [{ owner: foundUser._id }, {deleted: false}, { favorite: true }]
         });
 
-        res.status(200).send({notes: foundNotes});
+        res.status(200).send({success:"Found notes!", data: foundNotes});
     }
     catch(error) {
         res.status(500).send(getErrorMessage(error));
@@ -91,7 +91,7 @@ try {
     if (!foundNote)
         throw new Error('Note not found')
 
-    res.status(200).send({note: foundNote})
+    res.status(200).send({ success:"Found note!", data: foundNote })
 }
 catch(error) {
     res.status(500).send(getErrorMessage(error))
