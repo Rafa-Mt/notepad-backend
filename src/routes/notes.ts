@@ -156,9 +156,9 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
     }
 });
 
-router.delete('/:username/note/:title', auth, async (req, res) => {
+router.delete('/:username/note/:_id', auth, async (req, res) => {
     try {
-        const { username, title } = req.params;
+        const { username, _id } = req.params;
 
         const body = noteSchema.safeParse(req.body);
         if (!body.success) 
@@ -168,7 +168,7 @@ router.delete('/:username/note/:title', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { title }]});
+        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { _id }]});
         if (!foundNote)
             throw new Error('Note not found');
 
