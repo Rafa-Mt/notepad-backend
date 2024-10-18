@@ -164,7 +164,7 @@ router.delete('/:username/note/:_id', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { _id }]});
+        const foundNote = await Note.findOne({ $and: [{ owner: foundUser._id }, {deleted: false}, { _id }]});
         if (!foundNote)
             throw new Error('Note not found');
 
