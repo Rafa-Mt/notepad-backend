@@ -176,6 +176,7 @@ export const login = async (user: {username: string, password: string}) => {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log(req.header('Authorization'))
         const token = req.header('Authorization')?.replace('Bearer ', '');
         console.log({ params: req.params, body: req.body, headers: req.headers.authorization });
         if (!token) throw new Error('Token not found');
