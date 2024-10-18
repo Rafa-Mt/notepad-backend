@@ -13,8 +13,8 @@ export interface IUser extends Document {
 export interface INote extends Document {
     title: string,
     content: string,
-    categories: ObjectId[],
-    owner: ObjectId,
+    categories: string[],
+    owner: string,
     priority: number,
     favorite: boolean,
     deleted: boolean,
@@ -22,7 +22,7 @@ export interface INote extends Document {
 
 export interface ICategory extends Document {
     title: string,
-    owner: ObjectId,
+    owner: string,
     emoji: string
 }
 
