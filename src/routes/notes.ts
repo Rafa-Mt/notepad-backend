@@ -160,10 +160,6 @@ router.delete('/:username/note/:_id', auth, async (req, res) => {
     try {
         const { username, _id } = req.params;
 
-        const body = noteSchema.safeParse(req.body);
-        if (!body.success) 
-            throw new FormatError(JSON.stringify(body.error.flatten()));
-
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
