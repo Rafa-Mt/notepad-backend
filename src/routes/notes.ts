@@ -79,7 +79,7 @@ router.get('/:username/notes/favorites', auth, async (req, res) => {
     }
 });
 
-router.get(':username/note/:_id', auth, async (req, res) => {
+router.get('/:username/note/:_id', auth, async (req, res) => {
 try {
     const {username, _id} = req.params;
     
@@ -98,7 +98,7 @@ catch(error) {
 }
 });
 
-router.post(':username/note', auth, async (req, res) => {
+router.post('/:username/note', auth, async (req, res) => {
     try {
         const {username} = req.params;
         const body = noteSchema.safeParse(req.body)
@@ -121,7 +121,7 @@ router.post(':username/note', auth, async (req, res) => {
     }
 });
 
-router.put(':username/note', auth, async (req, res) => {
+router.put('/:username/note', auth, async (req, res) => {
     try {
         const { username } = req.params;
         const body = noteSchema.safeParse(req.body);
@@ -151,7 +151,7 @@ router.put(':username/note', auth, async (req, res) => {
     }
 });
 
-router.delete(':username/note/:title', auth, async (req, res) => {
+router.delete('/:username/note/:title', auth, async (req, res) => {
     try {
         const { username, title } = req.params;
 
