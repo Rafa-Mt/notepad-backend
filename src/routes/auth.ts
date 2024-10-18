@@ -16,10 +16,10 @@ router.post('/login', async (req, res) => {
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()))
         const foundUser = await login(body.data);
-        res.status(200).send({ success: "Logged in succesfully!", data: foundUser });
+        res.status(200).json({ success: "Logged in succesfully!", data: foundUser });
     } 
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
         return;
     }
 });
@@ -31,10 +31,10 @@ router.post('/register', async (req, res) => {
             throw new FormatError(JSON.stringify(body.error.flatten()));
             
         await register(body.data);
-        res.status(200).send({success: "User created successfully!"});
+        res.status(200).json({success: "User created successfully!"});
     }
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
         return;
     }
 });
@@ -48,10 +48,10 @@ router.post('/send-reset-token', async (req, res) => {
             throw new FormatError(JSON.stringify(body.error.flatten()))
         
         await sendToken(body.data.email);
-        res.status(200).send({success: "Token sent to user email"})
+        res.status(200).json({success: "Token sent to user email"})
     } 
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
         return;
     }
 
@@ -68,10 +68,10 @@ router.put('/reset-password', async (req, res) => {
         const success = await changePassword(body.data);
         if (!success) throw new Error('Failed to change password');
 
-        res.status(200).send({success: "Password changed successfully"})
+        res.status(200).json({success: "Password changed successfully"})
     }
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
         return
     }
 })
@@ -88,10 +88,10 @@ router.post('/check-reset-token', async (req, res) => {
 
         if (!success) throw new Error('Invalid Token');
 
-        res.status(200).send({success: "Valid Token"})
+        res.status(200).json({success: "Valid Token"})
     }
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
         return
     }
 });

@@ -18,10 +18,10 @@ router.get('/:username/notes', auth, async (req, res) => {
 
         const foundNotes = await Note.find({ $and: [{ owner: foundUser._id }, {deleted: false}]});
 
-        res.status(200).send({notes: foundNotes});
+        res.status(200).json({notes: foundNotes});
     }
     catch(error) {
-        res.status(500).send(getErrorMessage(error))
+        res.status(500).json(getErrorMessage(error))
     }
 });
 
@@ -36,10 +36,10 @@ router.get('/:username/notes/:title', auth, async (req, res) => {
             { owner: foundUser._id }, {deleted: false}, {title}
         );
 
-        res.status(200).send({ success:"Found note!", data: foundNote});
+        res.status(200).json({ success:"Found note!", data: foundNote});
     }
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
     }
 })
 
@@ -54,10 +54,10 @@ router.get('/:username/notes/:category', auth, async (req, res) => {
             $and: [{ owner: foundUser._id }, {deleted: false}, { categories: category }]
         });
 
-        res.status(200).send({ success:"Found notes!", data: foundNotes });
+        res.status(200).json({ success:"Found notes!", data: foundNotes });
     }
     catch (error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
     }
 });
 
@@ -72,10 +72,10 @@ router.get('/:username/notes/favorites', auth, async (req, res) => {
             $and: [{ owner: foundUser._id }, {deleted: false}, { favorite: true }]
         });
 
-        res.status(200).send({success:"Found notes!", data: foundNotes});
+        res.status(200).json({success:"Found notes!", data: foundNotes});
     }
     catch(error) {
-        res.status(500).send(getErrorMessage(error));
+        res.status(500).json(getErrorMessage(error));
     }
 });
 
@@ -91,10 +91,10 @@ try {
     if (!foundNote)
         throw new Error('Note not found')
 
-    res.status(200).send({ success:"Found note!", data: foundNote })
+    res.status(200).json({ success:"Found note!", data: foundNote })
 }
 catch(error) {
-    res.status(500).send(getErrorMessage(error))
+    res.status(500).json(getErrorMessage(error))
 }
 });
 
@@ -114,10 +114,10 @@ router.post('/:username/note', auth, async (req, res) => {
             title, content, priority, favorite, categories, owner: foundUser._id
         });
         newNote.save();
-        res.status(200).send({success: "Note saved succesfully!"})
+        res.status(200).json({success: "Note saved succesfully!"})
     }
     catch(error) {
-        res.status(500).send(getErrorMessage(error))
+        res.status(500).json(getErrorMessage(error))
     }
 });
 
@@ -144,10 +144,10 @@ router.put('/:username/note', auth, async (req, res) => {
         foundNote.favorite = body.data.favorite;
         await foundNote.save();
 
-        res.status(200).send({success: "Note saved succesfully!"})
+        res.status(200).json({success: "Note saved succesfully!"})
     }
     catch(error) {
-        res.status(500).send(getErrorMessage(error))
+        res.status(500).json(getErrorMessage(error))
     }
 });
 
@@ -170,9 +170,9 @@ router.delete('/:username/note/:title', auth, async (req, res) => {
         foundNote.deleted = true;
         foundNote.save();
 
-        res.status(200).send({success: "Note delete succesfully!"})
+        res.status(200).json({success: "Note deleted succesfully!"})
     }
     catch(error) {
-        res.status(500).send(getErrorMessage(error))
+        res.status(500).json(getErrorMessage(error))
     }
 });
