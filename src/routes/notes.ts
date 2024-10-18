@@ -3,7 +3,7 @@ import { Note } from "../models/note";
 import express from 'express'
 import { FormatError, getErrorMessage } from "../services/utils";
 import { auth } from "../services/auth";
-import { noteEditSchema, noteSchema } from "../schemas/models";
+import { noteSchema } from "../schemas/models";
 
 const router = express.Router();
 export default router;
@@ -129,7 +129,7 @@ router.post('/:username/note', auth, async (req, res) => {
 router.put('/:username/note/:_id', auth, async (req, res) => {
     try {
         const { username, _id } = req.params;
-        const body = noteEditSchema.safeParse(req.body);
+        const body = noteSchema.safeParse(req.body);
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
 
