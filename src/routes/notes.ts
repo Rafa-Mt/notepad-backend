@@ -113,7 +113,7 @@ router.post('/:username/note', auth, async (req, res) => {
         
         console.log("3333333333333")
         const {title, content, priority, favorite, categories} = body.data;
-        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { title }]})
+        const foundNote = await Note.findOne({ $and: [{ owner: foundUser._id }, { deleted: false }, { title }]})
         if (foundNote) 
             throw new Error('Title already used');
         
