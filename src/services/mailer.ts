@@ -1,27 +1,20 @@
 import dotenv from 'dotenv'
-import { createTransport, TransportOptions } from 'nodemailer';
 import { Mail } from '../types';
+import { Resend } from 'resend';
 
 dotenv.config();
 
-const transporter = createTransport({
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT as unknown as number,
-    secure: true,
-    auth: {
-        user: process.env.MAIL_DIR,
-        pass: process.env.MAIL_PASS
-    }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendMessage = async (content: Mail) => {
-    if (!content.html && content.text) {
+    if (!content.html) {
         throw new Error("Message has no body")
     }
-    const {to, subject, text, html} = content; 
-    await transporter.sendMail({
-        from: process.env.MAIL_DIR,
-        to, subject, text, html,
+    const maildir = process.env.MAIL_DIR as string; 
+    const {to, subject, html} = content; 
+    await resend.emails.send({
+        from: maildir,
+        to, subject, html,
     });
 }
 

@@ -35,8 +35,7 @@ export interface IPasswordResetToken extends Document {
 export interface Mail {
     to: string,
     subject: string,
-    text?: string,
-    html?: string,
+    html: string,
 }
 
 export interface CustomRequest extends Request {
