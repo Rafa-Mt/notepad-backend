@@ -1,24 +1,24 @@
 import { z } from 'zod'
 
 export const registerSchema = z.object({
-    username: z.string().refine(s => !s.includes(' '), 'No Spaces!'),
-    email: z.string().email(),
-    password: z.string().min(8)
+    username: z.string().min(3).max(20).refine(s => !s.includes(' '), 'No Spaces!'),
+    email: z.string().email().max(35),
+    password: z.string().min(8).max(20).refine(s => !s.includes(' '), 'No Spaces!')
 });
 
 export const loginSchema = z.object({
-    username: z.string().refine(s => !s.includes(' '), 'No Spaces!'),
-    password: z.string().min(8)
+    username: z.string().min(4).max(20).refine(s => !s.includes(' '), 'No Spaces!'),
+    password: z.string().min(8).max(20).refine(s => !s.includes(' '), 'No Spaces!')
 })
 
 export const passwordResetSchema = z.object({
-    email: z.string().email(),
-    newPassword: z.string().min(8),
+    email: z.string().email().max(25),
+    newPassword: z.string().min(8).max(20),
     token: z.string()
 });
 
 export const resetRequestSchema = z.object({
-    email: z.string().email()
+    email: z.string().email().max(35)
 });
 
 export const tokenCheckSchema = z.object({

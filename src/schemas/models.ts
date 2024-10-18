@@ -10,6 +10,6 @@ export const noteSchema = z.object({
 });
 
 export const categorySchema = z.object({
-    title: z.string(),
+    title: z.string().max(20),
     emoji: z.string().emoji()
 })
