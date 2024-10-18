@@ -95,7 +95,7 @@ router.post('/check-reset-token', async (req, res) => {
         res.status(200).json({success: "Valid Token"})
     }
     catch (error) {
-        console.error(error);
+        console.error(`${(error as Error).name}: ${(error as Error).message} `);
         res.status(500).json(getErrorMessage(error));
         return
     }
