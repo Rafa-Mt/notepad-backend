@@ -3,7 +3,7 @@ import { Note } from "../models/note";
 import express from 'express'
 import { FormatError, getErrorMessage } from "../services/utils";
 import { auth } from "../services/auth";
-import { noteSchema } from "../schemas/models";
+import { noteEditSchema, noteSchema } from "../schemas/models";
 
 const router = express.Router();
 export default router;
@@ -100,24 +100,20 @@ catch(error) {
 
 router.post('/:username/note', auth, async (req, res) => {
     try {
-        console.log("1111111111111")
         const {username} = req.params;
         const body = noteSchema.safeParse(req.body)
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
         
-        console.log("2222222222222")
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
         
-        console.log("3333333333333")
         const {title, content, priority, favorite, categories} = body.data;
         const foundNote = await Note.findOne({ $and: [{ owner: foundUser._id }, { deleted: false }, { title }]})
         if (foundNote) 
             throw new Error('Title already used');
         
-        console.log("4444444444444")
         const newNote = new Note({
             title, content, priority, favorite, categories, owner: foundUser._id
         });
@@ -133,7 +129,7 @@ router.post('/:username/note', auth, async (req, res) => {
 router.put('/:username/note/:_id', auth, async (req, res) => {
     try {
         const { username, _id } = req.params;
-        const body = noteSchema.safeParse(req.body);
+        const body = noteEditSchema.safeParse(req.body);
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
 
