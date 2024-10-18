@@ -25,7 +25,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
     try {
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
 
-        if (!foundUser) throw new Error('Invalid user'); 
+        if (!foundUser) throw new Error('Invalid credentials'); 
 
         const isMatch = compareSync(password, foundUser.password);
 
@@ -33,7 +33,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
             console.log(foundUser)
             return foundUser
         } 
-        else throw new Error('Invalid password');
+        else throw new Error('Invalid credentials');
         
     } 
     catch (error) {
