@@ -176,8 +176,8 @@ export const login = async (user: {username: string, password: string}) => {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.header('Authorization')?.replace('Bearer', '');
-
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        console.log({ params: req.params, body: req.body, headers: req.headers });
         if (!token) throw new Error('Token not found');
         const decodedToken = verify(token, process.env.JWT_SECRET_KEY as Secret);
         (req as CustomRequest).token = decodedToken;
@@ -185,6 +185,6 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         next();
     }
     catch (error) {
-        res.status(400).send('User not logged in')
+        res.status(400).send('User not logged in');
     }
 }
