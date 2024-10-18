@@ -7,7 +7,7 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    username: z.string().min(4).max(20).refine(s => !s.includes(' '), 'No Spaces!'),
+    username: z.string().min(3).max(20).refine(s => !s.includes(' '), 'No Spaces!'),
     password: z.string().min(8).max(20).refine(s => !s.includes(' '), 'No Spaces!')
 })
 
