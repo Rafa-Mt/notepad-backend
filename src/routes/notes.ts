@@ -100,25 +100,29 @@ catch(error) {
 
 router.post('/:username/note', auth, async (req, res) => {
     try {
+        console.log("1111111111111")
         const {username} = req.params;
         const body = noteSchema.safeParse(req.body)
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
         
+        console.log("2222222222222")
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
-
+        
+        console.log("3333333333333")
         const {title, content, priority, favorite, categories} = body.data;
         const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { title }]})
         if (foundNote) 
             throw new Error('Title already used');
         
+        console.log("4444444444444")
         const newNote = new Note({
             title, content, priority, favorite, categories, owner: foundUser._id
         });
         
-        newNote.save();
+        await newNote.save();
         res.status(200).json({success: "Note saved succesfully!"})
     }
     catch(error) {
