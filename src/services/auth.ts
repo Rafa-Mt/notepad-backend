@@ -114,11 +114,18 @@ export const register = async (user: { username: string, email: string, password
     const { username, email, password } = user;
     try {   
 
-        const overlappingEmail = await User.find({$and: [{ email }, {deleted: false}]});
+        const overlappingEmail = await User.findOne({$and: [{ email }, {deleted: false}]});
+        
+        const overlappingUser = await User.findOne({$and: [{ username }, {deleted: false}]});
+
+        console.log({overlappingEmail, overlappingUser})
+
+        if (overlappingEmail && overlappingUser) 
+            throw new Error('Username already in use')
+
         if (overlappingEmail)
             throw new Error('Email already in use');
-        
-        const overlappingUser = await User.find({$and: [{ username }, {deleted: false}]});
+
         if (overlappingUser)    
             throw new Error('Username already in use');
         
