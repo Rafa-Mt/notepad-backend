@@ -4,7 +4,10 @@ import { Mail } from '../types';
 
 dotenv.config();
 
-
+console.log({
+    user: process.env.MAIL_DIR,
+    pass: process.env.MAIL_PASS
+})
 const transporter = createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT as unknown as number,

@@ -106,8 +106,6 @@ export const sendToken = async (email: string) => {
     }
 }
 
-
-
 export const register = async (user: { username: string, email: string, password: string }) => {
     const { username, email, password } = user;
     try {
