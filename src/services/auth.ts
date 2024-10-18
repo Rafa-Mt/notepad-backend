@@ -84,14 +84,15 @@ const tokenMailFormat =  (token: string) => `
 
 export const sendToken = async (email: string) => {
     try {
-        const tokens = await PasswordToken.find({ email });
+        const tokens = await PasswordToken.findOne({ email });
 
         if (tokens)
             throw new Error('Key already sent')
 
         const foundUser = await User.findOne({ email });
         
-        if (!foundUser) throw new Error('User not found'); 
+        if (!foundUser) 
+            throw new Error('User not found'); 
 
         const token = await createToken(foundUser.username);
 
@@ -112,9 +113,10 @@ export const sendToken = async (email: string) => {
 export const register = async (user: { username: string, email: string, password: string }) => {
     const { username, email, password } = user;
     try {
-        const overlappingUser = await User.findOne({$and: [{ username }, {deleted: false}]});
-        if (overlappingUser) 
+        const overlappingUser = await User.findOne({$and: [{ $or: [{ username }, { email }]}, {deleted: false}]});
+        if (overlappingUser) {
             throw new Error('User already exist')
+        }
         
         const hashedPassword = await hash(password, saltRounds);
         const newUser = new User({username, email, password: hashedPassword, deleted:false});
