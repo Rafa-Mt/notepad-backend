@@ -110,9 +110,14 @@ router.post('/:username/note', auth, async (req, res) => {
             throw new Error('User not found');
 
         const {title, content, priority, favorite, categories} = body.data;
+        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { title }]})
+        if (foundNote) 
+            throw new Error('Title already used');
+        
         const newNote = new Note({
-            title, content, priority, favorite, categories, owner: foundUser._id, deleted: false
+            title, content, priority, favorite, categories, owner: foundUser._id
         });
+        
         newNote.save();
         res.status(200).json({success: "Note saved succesfully!"})
     }
