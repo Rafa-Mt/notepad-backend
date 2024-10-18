@@ -121,9 +121,9 @@ router.post('/:username/note', auth, async (req, res) => {
     }
 });
 
-router.put('/:username/note', auth, async (req, res) => {
+router.put('/:username/note/:_id', auth, async (req, res) => {
     try {
-        const { username } = req.params;
+        const { username, _id } = req.params;
         const body = noteSchema.safeParse(req.body);
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
@@ -132,7 +132,7 @@ router.put('/:username/note', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}]})
+        const foundNote = await Note.findOne({ $and: [{ username }, {deleted: false}, { _id }]})
 
         if (!foundNote)
             throw new Error('Note not found');
