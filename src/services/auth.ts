@@ -112,14 +112,15 @@ export const sendToken = async (email: string) => {
 
 export const register = async (user: { username: string, email: string, password: string }) => {
     const { username, email, password } = user;
-    try {
-        const overlappingUser = await User.find({$and: [{ username }, {deleted: false}]});
-        if (overlappingUser)    
-            throw new Error('Username already in use');
+    try {   
 
         const overlappingEmail = await User.find({$and: [{ email }, {deleted: false}]});
         if (overlappingEmail)
-            throw new Error('Email already in use')
+            throw new Error('Email already in use');
+        
+        const overlappingUser = await User.find({$and: [{ username }, {deleted: false}]});
+        if (overlappingUser)    
+            throw new Error('Username already in use');
         
         const hashedPassword = await hash(password, saltRounds);
         const newUser = new User({username, email, password: hashedPassword, deleted:false});
