@@ -26,12 +26,10 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     try {
-        console.log(req.body)
         const body = registerSchema.safeParse(req.body);
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
             
-        
         await register(body.data);
         res.status(200).send({success: "User created successfully!"});
     }
