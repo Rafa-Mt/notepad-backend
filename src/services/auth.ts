@@ -185,6 +185,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         next();
     }
     catch (error) {
+        console.error(error);
         res.status(400).send('User not logged in');
     }
 }
