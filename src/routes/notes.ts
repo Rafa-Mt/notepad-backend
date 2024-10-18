@@ -111,7 +111,7 @@ router.post('/:username/note', auth, async (req, res) => {
 
         const {title, content, priority, favorite, categories} = body.data;
         const newNote = new Note({
-            title, content, priority, favorite, categories, owner: foundUser._id
+            title, content, priority, favorite, categories, owner: foundUser._id, deleted: false
         });
         newNote.save();
         res.status(200).json({success: "Note saved succesfully!"})

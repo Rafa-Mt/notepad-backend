@@ -25,3 +25,4 @@ export const sendMessage = async (content: Mail) => {
 //     html: `<div style="width: 100%; background-color: blue
 //     "><b>Bold messagge</b></div>`
 // })
+
