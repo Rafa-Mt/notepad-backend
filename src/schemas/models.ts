@@ -1,10 +1,9 @@
 import { z } from 'zod'
-import { Schema } from 'mongoose'
 
 export const noteSchema = z.object({
     title: z.string().max(30),
     content: z.string().max(250),
-    categories: z.array(z.instanceof(Schema.Types.ObjectId)),
+    categories: z.array(z.string()),
     priority: z.number().min(0).max(5),
     favorite: z.boolean()
 });
