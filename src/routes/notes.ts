@@ -22,6 +22,7 @@ router.get('/:username/notes', auth, async (req, res) => {
     }
     catch(error) {
         res.status(500).json(getErrorMessage(error))
+        console.error(error);
     }
 });
 
@@ -39,6 +40,7 @@ router.get('/:username/notes/:title', auth, async (req, res) => {
         res.status(200).json({ success:"Found note!", data: foundNote});
     }
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
     }
 })
@@ -57,6 +59,7 @@ router.get('/:username/notes/:category', auth, async (req, res) => {
         res.status(200).json({ success:"Found notes!", data: foundNotes });
     }
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
     }
 });
@@ -75,27 +78,29 @@ router.get('/:username/notes/favorites', auth, async (req, res) => {
         res.status(200).json({success:"Found notes!", data: foundNotes});
     }
     catch(error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
     }
 });
 
 router.get('/:username/note/:_id', auth, async (req, res) => {
-try {
-    const {username, _id} = req.params;
-    
-    const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
-    if (!foundUser) 
-        throw new Error('User not found');
+    try {
+        const {username, _id} = req.params;
+        
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
+        if (!foundUser) 
+            throw new Error('User not found');
 
-    const foundNote = await Note.findOne({ $and: [{ _id }, {deleted: false}]})
-    if (!foundNote)
-        throw new Error('Note not found')
+        const foundNote = await Note.findOne({ $and: [{ _id }, {deleted: false}]})
+        if (!foundNote)
+            throw new Error('Note not found')
 
-    res.status(200).json({ success:"Found note!", data: foundNote })
-}
-catch(error) {
-    res.status(500).json(getErrorMessage(error))
-}
+        res.status(200).json({ success:"Found note!", data: foundNote })
+    }
+    catch(error) {
+        console.error(error);
+        res.status(500).json(getErrorMessage(error));
+    }
 });
 
 router.post('/:username/note', auth, async (req, res) => {
@@ -122,7 +127,8 @@ router.post('/:username/note', auth, async (req, res) => {
         res.status(200).json({success: "Note saved succesfully!"})
     }
     catch(error) {
-        res.status(500).json(getErrorMessage(error))
+        res.status(500).json(getErrorMessage(error));
+        console.error(error);
     }
 });
 
@@ -152,7 +158,8 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
         res.status(200).json({success: "Note saved succesfully!"})
     }
     catch(error) {
-        res.status(500).json(getErrorMessage(error))
+        console.error(error);
+        res.status(500).json(getErrorMessage(error));
     }
 });
 
@@ -174,6 +181,7 @@ router.delete('/:username/note/:_id', auth, async (req, res) => {
         res.status(200).json({success: "Note deleted succesfully!"})
     }
     catch(error) {
-        res.status(500).json(getErrorMessage(error))
+        console.error(error);
+        res.status(500).json(getErrorMessage(error));
     }
 });

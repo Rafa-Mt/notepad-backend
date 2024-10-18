@@ -21,6 +21,7 @@ router.get('/:username/categories', auth, async (req, res) => {
         res.status(200).send({ success:"Categories found", data: foundCategories })
     }
     catch(error) {
+        console.error(error);
         res.status(500).send(getErrorMessage(error))
     }
 })
@@ -52,6 +53,7 @@ router.post('/:username/category', auth, async (req, res) => {
         res.status(200).send({success: "Category created successfully!"})
     }
     catch(error) {
+        console.error(error);
         res.status(500).send(getErrorMessage(error))
     }
 });
@@ -86,6 +88,7 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
         res.status(200).send({ success: "Category edited successfully!" })
     }
     catch(error) {
+        console.error(error);
         res.status(500).send(getErrorMessage(error))
     }
 });
@@ -103,6 +106,7 @@ router.delete('/:username/category/:_id', auth, async (req, res) => {
         res.status(200).send({ success: "Category deleted successfully!" })
     }
     catch(error) {
+        console.error(error);
         res.status(500).send(getErrorMessage(error))
     }
 });
