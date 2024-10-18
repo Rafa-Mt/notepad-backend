@@ -84,7 +84,10 @@ const tokenMailFormat =  (token: string) => `
 
 export const sendToken = async (email: string) => {
     try {
-        const tokens = await PasswordToken.find();
+        const tokens = await PasswordToken.find({ email });
+
+        if (tokens)
+            throw new Error('Key already sent')
 
         const foundUser = await User.findOne({ email });
         
