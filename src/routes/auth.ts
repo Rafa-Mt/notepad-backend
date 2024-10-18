@@ -19,6 +19,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({ success: "Logged in succesfully!", data: foundUser });
     } 
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
         return;
     }
@@ -34,6 +35,7 @@ router.post('/register', async (req, res) => {
         res.status(200).json({success: "User created successfully!"});
     }
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
         return;
     }
@@ -51,6 +53,7 @@ router.post('/send-reset-token', async (req, res) => {
         res.status(200).json({success: "Token sent to user email"})
     } 
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
         return;
     }
@@ -71,6 +74,7 @@ router.put('/reset-password', async (req, res) => {
         res.status(200).json({success: "Password changed successfully"})
     }
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
         return
     }
@@ -91,6 +95,7 @@ router.post('/check-reset-token', async (req, res) => {
         res.status(200).json({success: "Valid Token"})
     }
     catch (error) {
+        console.error(error);
         res.status(500).json(getErrorMessage(error));
         return
     }
