@@ -148,7 +148,7 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
         if (!foundNote)
             throw new Error('Note not found');
 
-        foundNote.title = body.data.content;
+        foundNote.title = body.data.title;
         foundNote.content = body.data.content;
         foundNote.categories = body.data.categories;
         foundNote.priority = body.data.priority;
