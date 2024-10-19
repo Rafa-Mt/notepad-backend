@@ -26,24 +26,24 @@ router.get('/:username/notes', auth, async (req, res) => {
     }
 });
 
-router.get('/:username/notes/:title', auth, async (req, res) => {
-    try {
-        const { username, title } = req.params;
-        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
-        if (!foundUser) 
-            throw new Error('User not found');
+// router.get('/:username/notes/:title', auth, async (req, res) => {
+//     try {
+//         const { username, title } = req.params;
+//         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
+//         if (!foundUser) 
+//             throw new Error('User not found');
 
-        const foundNote = await Note.findOne(
-            { owner: foundUser._id }, {deleted: false}, {title}
-        );
+//         const foundNote = await Note.findOne(
+//             { owner: foundUser._id }, {deleted: false}, {title}
+//         );
 
-        res.status(200).json({ success:"Found note!", data: foundNote});
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json(getErrorMessage(error));
-    }
-})
+//         res.status(200).json({ success:"Found note!", data: foundNote});
+//     }
+//     catch (error) {
+//         console.error(error);
+//         res.status(500).json(getErrorMessage(error));
+//     }
+// })
 
 router.get('/:username/notes/:category', auth, async (req, res) => {
     try {
