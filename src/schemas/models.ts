@@ -8,6 +8,13 @@ export const noteSchema = z.object({
     favorite: z.boolean()
 });
 
+export const noteEditSchema = z.object({
+    title: z.string().max(30).optional(),
+    content: z.string().optional(),
+    categories: z.array(z.string()).optional(),
+    priority: z.number().min(0).max(5).optional(),
+    favorite: z.boolean().optional()
+})
 
 export const categorySchema = z.object({
     title: z.string().max(20),

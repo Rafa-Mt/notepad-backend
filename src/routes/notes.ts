@@ -3,7 +3,7 @@ import { Note } from "../models/note";
 import express from 'express'
 import { FormatError, getErrorMessage } from "../services/utils";
 import { auth } from "../services/auth";
-import { noteSchema } from "../schemas/models";
+import { noteEditSchema, noteSchema } from "../schemas/models";
 
 const router = express.Router();
 export default router;
@@ -72,7 +72,7 @@ router.get('/:username/notes/favorites', auth, async (req, res) => {
             throw new Error('User not found');
 
         const foundNotes = await Note.find({
-            $and: [{ owner: foundUser._id }, {deleted: false}, { favorite: true }]
+            $and: [{ owner: foundUser._id }, { deleted: false }, { favorite: true }]
         });
 
         res.status(200).json({success:"Found notes!", data: foundNotes});
@@ -135,25 +135,29 @@ router.post('/:username/note', auth, async (req, res) => {
 router.put('/:username/note/:_id', auth, async (req, res) => {
     try {
         const { username, _id } = req.params;
-        const body = noteSchema.safeParse(req.body);
+        const body = noteEditSchema.safeParse(req.body);
+
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
+
+        const propsToChange = Object.fromEntries(
+            Object.entries(body.data)
+        );
+
+        console.log(propsToChange);
+    
 
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
 
-        const foundNote = await Note.findOne({ $and: [{ owner: foundUser._id }, { deleted: false }, { _id }]})
-
+        const foundNote = await Note.findOneAndUpdate(
+            { $and: [{ owner: foundUser._id }, { deleted: false }, { _id }]}, 
+            propsToChange
+        )
+        
         if (!foundNote)
             throw new Error('Note not found');
-
-        foundNote.title = body.data.title;
-        foundNote.content = body.data.content;
-        foundNote.categories = body.data.categories;
-        foundNote.priority = body.data.priority;
-        foundNote.favorite = body.data.favorite;
-        await foundNote.save();
 
         res.status(200).json({success: "Note saved succesfully!"})
     }
