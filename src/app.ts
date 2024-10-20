@@ -28,6 +28,10 @@ app.get("/", (req: Request, res: Response) => {
     res.send(JSON.stringify({response: "TS + Node"}));
 });
 
+app.use((req: Request, res: Response) => {
+    res.status(404).json({ error: "Not Found" });
+});
+
 app.listen(port, () => {
     console.log(`[server]: Server is running at port ${port}`);
 });
