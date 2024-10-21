@@ -1,5 +1,6 @@
 import { User } from "../models/user";
 import { Note } from "../models/note";
+import { Category } from "../models/category";
 import express from 'express'
 import { FormatError, getErrorMessage } from "../services/utils";
 import { auth } from "../services/auth";
@@ -96,6 +97,9 @@ router.post('/:username/note', auth, async (req, res) => {
             throw new Error('User not found');
         
         const {title, content, priority, favorite, categories} = body.data;
+
+        const userCategories = Category.find({ owner: foundUser._id });
+        console.log(userCategories);
         
         const newNote = new Note({
             title, content, priority, favorite, categories, owner: foundUser._id
