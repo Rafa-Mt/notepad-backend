@@ -98,7 +98,7 @@ router.post('/:username/note', auth, async (req, res) => {
         
         const {title, content, priority, favorite, categories} = body.data;
 
-        const userCategories = Category.find({ owner: foundUser._id });
+        const userCategories = await Category.find({ owner: foundUser._id });
         console.log(userCategories);
         
         const newNote = new Note({
