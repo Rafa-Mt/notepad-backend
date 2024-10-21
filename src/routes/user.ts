@@ -43,4 +43,22 @@ router.put('/:username/change-email', auth , async (req, res) => {
     catch(error) {
         res.status(500).send(getErrorMessage(error))
     }
+});
+
+router.get('/:username', auth, async (req, res) => {
+    try {
+        const { username } = req.params;
+        
+        const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
+        if (!foundUser) 
+            throw new Error('User not found');
+
+        res.status(200).send({data: {
+            username: foundUser.username,
+            email: foundUser.email
+        }});
+    }
+    catch(error) {
+        res.status(500).send(getErrorMessage(error))
+    }
 })
