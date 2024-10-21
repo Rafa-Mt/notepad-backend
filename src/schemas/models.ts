@@ -19,4 +19,9 @@ export const noteEditSchema = z.object({
 export const categorySchema = z.object({
     title: z.string().max(20),
     emoji: z.string().emoji()
+});
+
+export const categoryEditSchema = z.object({
+    title: z.string().max(20).optional(),
+    emoji: z.string().emoji().optional()
 })

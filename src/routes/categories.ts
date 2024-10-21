@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Category } from "../models/category";
 import { User } from "../models/user";
-import { categorySchema } from "../schemas/models";
+import { categoryEditSchema, categorySchema } from "../schemas/models";
 import { FormatError, getErrorMessage } from "../services/utils";
 import auth from "./auth";
 
@@ -61,7 +61,7 @@ router.post('/:username/category', auth, async (req, res) => {
 router.put('/:username/category/:_id', auth, async (req, res) => {
     try {
         const { username, _id } = req.params;
-        const body = categorySchema.safeParse(req.body)
+        const body = categoryEditSchema.safeParse(req.body)
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()));
         
@@ -80,8 +80,11 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
         if (!catToSave)
             throw new Error('Category not found')
 
-        catToSave.title = title;
-        catToSave.emoji = emoji;
+        if (title)
+            catToSave.title = title;
+
+        if (emoji)
+            catToSave.emoji = emoji;
         
         await catToSave.save();
 
