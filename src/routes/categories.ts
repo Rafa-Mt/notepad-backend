@@ -39,7 +39,7 @@ router.post('/:username/category', auth, async (req, res) => {
 
         const overlap = await Category.find({ $and: [{ owner: foundUser._id }, { title: body.data.title }]});
 
-        if (overlap)
+        if (overlap.length < 1)
             throw new Error('Title already used')
 
         const createdCategory = new Category({
