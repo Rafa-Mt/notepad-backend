@@ -45,7 +45,7 @@ router.post('/:username/category', auth, async (req, res) => {
         const createdCategory = new Category({
             owner: foundUser._id,
             title: body.data.title,
-            emoji: body.data.title,
+            emoji: body.data.emoji,
         });
 
         await createdCategory.save();
@@ -71,11 +71,11 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const overlap = await Category.find({ $and: [{ owner: foundUser._id }, {deleted: false}, { title: title }]});
+        const overlap = await Category.find({ $and: [{ owner: foundUser._id }, { title: title }]});
         if (overlap)
             throw new Error('Title already used')
         
-        const catToSave = await Category.findOne({ $and: [{ _id }, {deleted: false},]});
+        const catToSave = await Category.findOne({ _id });
 
         if (!catToSave)
             throw new Error('Category not found')
