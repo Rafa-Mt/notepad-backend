@@ -98,9 +98,15 @@ router.post('/:username/note', auth, async (req, res) => {
         
         const {title, content, priority, favorite, categories} = body.data;
 
-        const userCategories = await Category.find({ owner: foundUser._id });
+        const fetchedCategories = await Category.find({ owner: foundUser._id })
+        const userCategories = fetchedCategories.map((category) => category.title)
         console.log(userCategories);
-        
+
+        categories.forEach((category) => {
+            if (!(category in userCategories))
+                throw new Error('Categories not found');
+        });
+            
         const newNote = new Note({
             title, content, priority, favorite, categories, owner: foundUser._id
         });
@@ -126,12 +132,20 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
             Object.entries(body.data)
         );
 
-        console.log(propsToChange);
-    
-
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
+
+        if (propsToChange.categories) {
+            const fetchedCategories = await Category.find({ owner: foundUser._id })
+            const userCategories = fetchedCategories.map((category) => category.title)
+            console.log(userCategories);
+
+            (propsToChange.categories as string[]).forEach((category) => {
+                if (!(category in userCategories))
+                    throw new Error('Categories not found');
+            });
+        }
 
         const foundNote = await Note.findOneAndUpdate(
             { $and: [{ owner: foundUser._id }, { deleted: false }, { _id }]}, 
