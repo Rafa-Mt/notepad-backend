@@ -106,7 +106,7 @@ router.delete('/:username/category/:_id', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        await Category.deleteOne({ $and: [{ _id } ,{deleted: false}]});
+        await Category.deleteOne({ $and: [{ _id }]});
 
         res.status(200).send({ success: "Category deleted successfully!" })
     }
