@@ -139,6 +139,7 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
         if (propsToChange.categories) {
             const fetchedCategories = await Category.find({ owner: foundUser._id })
             const userCategories = fetchedCategories.map((category) => category.title)
+            console.log(propsToChange.categories)
             console.log(userCategories);
 
             (propsToChange.categories as string[]).forEach((category) => {
