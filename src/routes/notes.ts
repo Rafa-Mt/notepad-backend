@@ -143,6 +143,7 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
             console.log(userCategories);
 
             (propsToChange.categories as string[]).forEach((category) => {
+                console.log(`${category} in ${userCategories}: ${category in userCategories}`)
                 if (!(category in userCategories))
                     throw new Error('Categories not found');
             });
