@@ -18,7 +18,7 @@ router.get('/:username/categories', auth, async (req, res) => {
 
         const foundCategories = await Category.find({owner: foundUser._id});
 
-        res.status(200).send({ success:"Categories found", categories: foundCategories })
+        res.status(200).send({ success:"Categories found", data: foundCategories })
     }
     catch(error) {
         console.error(error);
