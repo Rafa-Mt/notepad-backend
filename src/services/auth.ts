@@ -42,7 +42,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
 }
 
 export const checkToken = async (token: string, username?: string) => {
-    return await PasswordToken.findOne({ $or: [{ token }, { username }] });
+    return await PasswordToken.findOne({ $or: [{ token: token.toLowerCase() }, { username }] });
 }
 
 const createToken = async (username: string, attempt: number = 0): Promise<string> => {
@@ -145,7 +145,7 @@ export const changePassword = async (data: {email: string, newPassword: string, 
             const userToChange = await User.findOne({ $and: [{ email }, {deleted: false}]});
             if (!userToChange) throw new Error('User not found'); 
             
-            const tokenChecker = await checkToken(token.toLowerCase());
+            const tokenChecker = await checkToken(token);
             if (!tokenChecker) throw new Error('Invalid token');
             
             const hashedPassword = await hash(newPassword, saltRounds);
