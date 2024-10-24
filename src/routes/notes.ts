@@ -33,9 +33,13 @@ router.get('/:username/notes/:category', auth, async (req, res) => {
         const foundUser = await User.findOne({ $and: [{ username }, {deleted: false}]});
         if (!foundUser) 
             throw new Error('User not found');
+
+        const foundCategory = await Category.findOne({ _id: category });
+        if (!foundCategory) 
+            throw new Error('Category not found');
         
         const foundNotes = await Note.find({ 
-            $and: [{ owner: foundUser._id }, {deleted: false}, { categories: category }]
+            $and: [{ owner: foundUser._id }, {deleted: false}, { categories: foundCategory.title }]
         });
 
         res.status(200).json({ success:"Found notes!", data: foundNotes });
@@ -102,10 +106,10 @@ router.post('/:username/note', auth, async (req, res) => {
         const userCategories = fetchedCategories.map((category) => category.title)
         console.log(userCategories);
 
-        categories.forEach((category) => {
-            if (!(category in userCategories))
-                throw new Error('Categories not found');
-        });
+        // categories.forEach((category) => {
+        //     if (!(category in userCategories))
+        //         throw new Error('Categories not found');
+        // });
             
         const newNote = new Note({
             title, content, priority, favorite, categories, owner: foundUser._id
@@ -142,11 +146,11 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
             console.log(propsToChange.categories)
             console.log(userCategories);
 
-            (propsToChange.categories as string[]).forEach((category) => {
-                console.log(`${category} in [${userCategories}]: ${userCategories.includes(category)}`)
-                if (!userCategories.includes(category))
-                    throw new Error('Categories not found');
-            });
+            // (propsToChange.categories as string[]).forEach((category) => {
+            //     console.log(`${category} in [${userCategories}]: ${userCategories.includes(category)}`)
+            //     if (!userCategories.includes(category))
+            //         throw new Error('Categories not found');
+            // });
         }
 
         const foundNote = await Note.findOneAndUpdate(
