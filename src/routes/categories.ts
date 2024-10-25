@@ -85,6 +85,11 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
         
         const prevTitle = catToSave.title;
         const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { categories: {$elemMatch: { $eq: prevTitle }} }] });
+
+        notesContainingCategory.forEach( async (note) => {
+            note.categories = note.categories.map((category) => (category == prevTitle ? title : category) as string);
+            await note.save();
+        })
         
         console.log(notesContainingCategory);
 
