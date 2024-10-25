@@ -84,7 +84,7 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
             throw new Error('Category not found')
         
         const prevTitle = catToSave.title;
-        const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { category: prevTitle }] });
+        const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { categories: {$elemMatch: { $eq: prevTitle }} }] });
         
         console.log(notesContainingCategory);
 
