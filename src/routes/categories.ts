@@ -4,6 +4,7 @@ import { User } from "../models/user";
 import { categoryEditSchema, categorySchema } from "../schemas/models";
 import { FormatError, getErrorMessage } from "../services/utils";
 import auth from "./auth";
+import { Note } from "../models/note";
 
 const router = Router();
 export default router;
@@ -78,9 +79,14 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
         }
         
         const catToSave = await Category.findOne({ _id });
-
+        
         if (!catToSave)
             throw new Error('Category not found')
+        
+        const prevTitle = catToSave.title;
+        const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { category: prevTitle }] });
+        
+        console.log(notesContainingCategory);
 
         if (title)
             catToSave.title = title;
