@@ -11,7 +11,7 @@ dotenv();
 
 router.post('/login', async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const body = loginSchema.safeParse(req.body);
         if (!body.success) 
             throw new FormatError(JSON.stringify(body.error.flatten()))
@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/send-reset-token', async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const body = resetRequestSchema.safeParse(req.body);
 
         if (!body.success) 
@@ -62,7 +62,7 @@ router.post('/send-reset-token', async (req, res) => {
 
 router.put('/reset-password', async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const body = passwordResetSchema.safeParse(req.body);
 
         if (!body.success) 
@@ -82,7 +82,7 @@ router.put('/reset-password', async (req, res) => {
 
 router.post('/check-reset-token', async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const body = tokenCheckSchema.safeParse(req.body);
 
         if (!body.success) 

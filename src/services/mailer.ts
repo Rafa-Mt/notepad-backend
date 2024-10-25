@@ -16,7 +16,7 @@ export const sendMessage = async (content: Mail) => {
         from: maildir,
         to, subject, html,
     });
-    console.log(message);
+    // console.log(message);
     return message
 }
 

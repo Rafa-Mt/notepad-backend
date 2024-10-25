@@ -23,7 +23,7 @@ app.use('/user', notes);
 app.use('/user', categories);
 
 app.get("/", (req: Request, res: Response) => {  
-    console.log("Gotten request to '/'")
+    // console.log("Gotten request to '/'")
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({response: "TS + Node"}));
 });

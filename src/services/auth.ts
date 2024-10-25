@@ -30,7 +30,7 @@ export const checkPassword = async (user: {username: string, password: string}) 
         const isMatch = compareSync(password, foundUser.password);
 
         if (isMatch) {
-            console.log(foundUser)
+            // console.log(foundUser)
             return foundUser
         } 
         else throw new Error('Invalid credentials');

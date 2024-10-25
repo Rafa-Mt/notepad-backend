@@ -104,7 +104,7 @@ router.post('/:username/note', auth, async (req, res) => {
 
         const fetchedCategories = await Category.find({ owner: foundUser._id })
         const userCategories = fetchedCategories.map((category) => category.title)
-        console.log(userCategories);
+        // console.log(userCategories);
 
         // categories.forEach((category) => {
         //     if (!(category in userCategories))
@@ -143,8 +143,8 @@ router.put('/:username/note/:_id', auth, async (req, res) => {
         if (propsToChange.categories) {
             const fetchedCategories = await Category.find({ owner: foundUser._id })
             const userCategories = fetchedCategories.map((category) => category.title)
-            console.log(propsToChange.categories)
-            console.log(userCategories);
+            // console.log(propsToChange.categories)
+            // console.log(userCategories);
 
             // (propsToChange.categories as string[]).forEach((category) => {
             //     console.log(`${category} in [${userCategories}]: ${userCategories.includes(category)}`)
