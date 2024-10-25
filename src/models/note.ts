@@ -4,7 +4,7 @@ import { INote } from "../types";
 export const noteSchema = new Schema<INote>({
     title: { type: String, required: true },
     content: { type: String,  }, 
-    categories: [{ type: String, required: true }],
+    categories: [{ type: String, }],
     owner: { type: Types.ObjectId, ref: 'user', required: true },
     priority: { type: Number, required: true },
     favorite: { type: Boolean, default: false },
