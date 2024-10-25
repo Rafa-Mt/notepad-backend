@@ -72,7 +72,7 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
             throw new Error('User not found');
 
         if (title) {
-            const overlap = await Category.find({ $and: [{ owner: foundUser._id }, { title }]});
+            const overlap = await Category.findOne({ $and: [{ owner: foundUser._id }, { title }]});
             if (overlap)
                 throw new Error('Title already used')
         }
