@@ -39,7 +39,7 @@ router.post('/:username/category', auth, async (req, res) => {
             throw new Error('User not found');
 
         const overlap = await Category.findOne({ $and: [{ owner: foundUser._id }, { title: body.data.title }]});
-        console.log(overlap);
+        // console.log(overlap);
         if (overlap)
             throw new Error('Title already used')
 
@@ -91,7 +91,7 @@ router.put('/:username/category/:_id', auth, async (req, res) => {
             await note.save();
         })
         
-        console.log(notesContainingCategory);
+        // console.log(notesContainingCategory);
 
         if (title)
             catToSave.title = title;
@@ -117,7 +117,16 @@ router.delete('/:username/category/:_id', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        await Category.deleteOne({ $and: [{ _id }]});
+        const deletedCat = await Category.deleteOne({ $and: [{ _id }]});
+
+        console.log(deletedCat);
+
+        // const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { categories: {$elemMatch: { $eq: title }} }] });
+
+        // notesContainingCategory.forEach( async (note) => {
+        //     note.categories = note.categories.map((category) => (category == title ? title : category) as string);
+        //     await note.save();
+        // })
 
         res.status(200).send({ success: "Category deleted successfully!" })
     }
