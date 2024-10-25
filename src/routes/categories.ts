@@ -117,16 +117,19 @@ router.delete('/:username/category/:_id', auth, async (req, res) => {
         if (!foundUser) 
             throw new Error('User not found');
 
-        const deletedCat = await Category.deleteOne({ $and: [{ _id }]});
+        const deletedCategory = await Category.findOneAndDelete({ $and: [{ _id }]});
+        if (!deletedCategory)
+            throw new Error('Category not found');
 
-        console.log(deletedCat);
+        const deletedTitle = deletedCategory.title
+        // console.log(deletedCategory);
 
-        // const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { categories: {$elemMatch: { $eq: title }} }] });
+        const notesContainingCategory = await Note.find({ $and: [{ owner: foundUser._id }, { categories: {$elemMatch: { $eq: deletedTitle }} }] });
 
-        // notesContainingCategory.forEach( async (note) => {
-        //     note.categories = note.categories.map((category) => (category == title ? title : category) as string);
-        //     await note.save();
-        // })
+        notesContainingCategory.forEach( async (note) => {
+            note.categories = note.categories.filter((category) => category !== deletedTitle) as string[]
+            await note.save();
+        })
 
         res.status(200).send({ success: "Category deleted successfully!" })
     }
